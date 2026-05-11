@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web App Contest — Vote</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       CONFIGURATION — edit these values
+       ============================================= */
+    :root {
+      --contest-name: "Web App Contest 2025"; /* not used in CSS, just for reference */
+
+      /* Google Form — replace these three values after creating your form.
+         See README at the bottom of this file for instructions. */
+      --_form-id: "YOUR_FORM_ID";
+    }
+
+    /* =============================================
+       BASE
+       ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0d0d0f;
+      color: #e8e6e1;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* =============================================
+       BACKGROUND TEXTURE
+       ============================================= */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(120, 80, 255, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 85% 80%, rgba(255, 160, 60, 0.08) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* =============================================
+       LAYOUT
+       ============================================= */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* =============================================
+       HEADER
+       ============================================= */
+    header {
+      padding: 56px 0 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 48px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #a78bfa;
+      margin-bottom: 14px;
+    }
+
+    header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 400;
+      line-height: 1.1;
+      color: #f5f3ee;
+      margin-bottom: 16px;
+      max-width: 640px;
+    }
+
+    header h1 em {
+      font-style: italic;
+      color: #c4b5fd;
+    }
+
+    header p {
+      font-size: 16px;
+      color: rgba(232, 230, 225, 0.55);
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* =============================================
+       PROGRESS
+       ============================================= */
+    .progress-section {
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .progress-track {
+      flex: 1;
+      min-width: 180px;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 3px;
+      background: linear-gradient(90deg, #7c3aed, #a78bfa);
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .progress-text {
+      font-size: 13px;
+      color: rgba(232,230,225,0.5);
+      white-space: nowrap;
+    }
+
+    .progress-text strong {
+      color: #a78bfa;
+      font-weight: 600;
+    }
+
+    /* =============================================
+       APPS GRID
+       ============================================= */
+    .grid-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(232,230,225,0.35);
+      margin-bottom: 20px;
+    }
+
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    /* =============================================
+       APP CARD
+       ============================================= */
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      position: relative;
+      user-select: none;
+    }
+
+    .card:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.16);
+      transform: translateY(-2px);
+    }
+
+    .card.selected {
+      border-color: #7c3aed;
+      background: rgba(124, 58, 237, 0.12);
+    }
+
+    .card.disabled {
+      opacity: 0.38;
+      cursor: default;
+      transform: none;
+    }
+
+    .card-thumb {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      position: relative;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #7c3aed;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.2s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .card.selected .rank-badge {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .card-body {
+      padding: 14px 16px 16px;
+    }
+
+    .card-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f5f3ee;
+      margin-bottom: 4px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: rgba(232,230,225,0.45);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #a78bfa;
+      transition: color 0.15s;
+    }
+
+    .card-link:hover { color: #c4b5fd; }
+
+    .card-link svg {
+      width: 11px;
+      height: 11px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* =============================================
+       FOOTER TRAY
+       ============================================= */
+    .tray {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(13,13,15,0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tray-picks {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .tray-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(232,230,225,0.3);
+      white-space: nowrap;
+    }
+
+    .picks-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pick-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(124,58,237,0.2);
+      border: 1px solid rgba(124,58,237,0.4);
+      border-radius: 99px;
+      padding: 4px 8px 4px 6px;
+      font-size: 12px;
+      color: #c4b5fd;
+      animation: pillIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    @keyframes pillIn {
+      from { opacity: 0; transform: scale(0.7); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .pick-pill .rank-num {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #7c3aed;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .pick-pill button {
+      background: none;
+      border: none;
+      color: rgba(196,181,253,0.6);
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      transition: color 0.15s;
+    }
+
+    .pick-pill button:hover { color: #f5f3ee; }
+
+    .empty-hint {
+      font-size: 13px;
+      color: rgba(232,230,225,0.25);
+      font-style: italic;
+    }
+
+    /* Vote button */
+    .vote-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #7c3aed;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 22px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s, opacity 0.15s;
+      white-space: nowrap;
+    }
+
+    .vote-btn:not(:disabled):hover { background: #6d28d9; transform: translateY(-1px); }
+    .vote-btn:not(:disabled):active { transform: translateY(0); }
+    .vote-btn:disabled { opacity: 0.35; cursor: default; }
+
+    .vote-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* =============================================
+       CARD THUMB COLORS (one per app)
+       ============================================= */
+    .thumb-0 { background: rgba(124,58,237,0.15); }
+    .thumb-1 { background: rgba(16,185,129,0.12); }
+    .thumb-2 { background: rgba(245,158,11,0.12); }
+    .thumb-3 { background: rgba(239,68,68,0.12); }
+    .thumb-4 { background: rgba(59,130,246,0.12); }
+    .thumb-5 { background: rgba(236,72,153,0.12); }
+    .thumb-6 { background: rgba(20,184,166,0.12); }
+    .thumb-7 { background: rgba(234,179,8,0.12); }
+    .thumb-8 { background: rgba(99,102,241,0.12); }
+    .thumb-9 { background: rgba(249,115,22,0.12); }
+
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media (max-width: 540px) {
+      header { padding: 36px 0 32px; }
+      .tray { padding: 10px 16px; }
+      .vote-btn { padding: 10px 16px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="eyebrow">Community Vote</div>
+    <h1>Vote for your <em>favourite</em> web apps</h1>
+    <p>Browse all 10 submissions below. Select your <strong>top 3</strong> in order — your first pick earns the most points. Then submit your ranked votes.</p>
+  </header>
+
+  <div class="progress-section">
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText"><strong>0</strong> of 3 selected</div>
+  </div>
+
+  <div class="grid-label">All submissions</div>
+  <div class="apps-grid" id="appsGrid"></div>
+
+</div>
+
+<!-- Fixed bottom tray -->
+<div class="tray">
+  <div class="tray-picks">
+    <span class="tray-label">Your picks</span>
+    <div class="picks-list" id="picksList">
+      <span class="empty-hint" id="emptyHint">None selected yet</span>
+    </div>
+  </div>
+  <button class="vote-btn" id="voteBtn" disabled onclick="submitVotes()">
+    Submit votes
+    <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+  </button>
+</div>
+
+<script>
+  /* =============================================
+     ✏️  STEP 1 — Replace these with your real app data
+     ============================================= */
+  const APPS = [
+    { id: 1, name: "App Name 1",  desc: "Short description of what this app does.",          url: "https://your-app-1-url.com",  emoji: "🚀" },
+    { id: 2, name: "App Name 2",  desc: "Short description of what this app does.",          url: "https://your-app-2-url.com",  emoji: "🌱" },
+    { id: 3, name: "App Name 3",  desc: "Short description of what this app does.",          url: "https://your-app-3-url.com",  emoji: "🗺️" },
+    { id: 4, name: "App Name 4",  desc: "Short description of what this app does.",          url: "https://your-app-4-url.com",  emoji: "🎨" },
+    { id: 5, name: "App Name 5",  desc: "Short description of what this app does.",          url: "https://your-app-5-url.com",  emoji: "🍽️" },
+    { id: 6, name: "App Name 6",  desc: "Short description of what this app does.",          url: "https://your-app-6-url.com",  emoji: "⏱️" },
+    { id: 7, name: "App Name 7",  desc: "Short description of what this app does.",          url: "https://your-app-7-url.com",  emoji: "📅" },
+    { id: 8, name: "App Name 8",  desc: "Short description of what this app does.",          url: "https://your-app-8-url.com",  emoji: "🏆" },
+    { id: 9, name: "App Name 9",  desc: "Short description of what this app does.",          url: "https://your-app-9-url.com",  emoji: "🎵" },
+    { id:10, name: "App Name 10", desc: "Short description of what this app does.",          url: "https://your-app-10-url.com", emoji: "✈️" },
+  ];
+
+  /* =============================================
+     ✏️  STEP 2 — Replace with your Google Form details
+         How to get these:
+         1. Open your Google Form (edit view)
+         2. Click ⋮ menu → "Get pre-filled link"
+         3. Select a dummy answer in each of the 3 dropdown questions
+         4. Click "Get Link" — copy the URL
+         5. The URL looks like:
+            https://docs.google.com/forms/d/FORM_ID/viewform
+              ?entry.111111111=Answer1
+              &entry.222222222=Answer2
+              &entry.333333333=Answer3
+         6. Copy the FORM_ID and the three entry.XXXXXXXXX numbers below
+     ============================================= */
+  const FORM_ID     = "YOUR_FORM_ID";       // ← replace
+  const ENTRY_1ST   = "entry.000000001";    // ← replace (1st choice field)
+  const ENTRY_2ND   = "entry.000000002";    // ← replace (2nd choice field)
+  const ENTRY_3RD   = "entry.000000003";    // ← replace (3rd choice field)
+
+  /* =============================================
+     APP LOGIC — no need to edit below this line
+     ============================================= */
+  const MAX_PICKS = 3;
+  const ranked = []; // ordered array of app ids, max 3
+
+  function buildGrid() {
+    const grid = document.getElementById('appsGrid');
+    grid.innerHTML = APPS.map((app, i) => {
+      const rank = ranked.indexOf(app.id);
+      const isSel = rank !== -1;
+      const isDisabled = !isSel && ranked.length >= MAX_PICKS;
+      return `
+        <div class="card${isSel ? ' selected' : ''}${isDisabled ? ' disabled' : ''}"
+             id="card-${app.id}"
+             onclick="${isDisabled ? '' : `toggleApp(${app.id})`}"
+             role="checkbox" aria-checked="${isSel}" aria-label="${app.name}">
+          <div class="card-thumb thumb-${i % 10}">
+            <span aria-hidden="true" style="font-size:38px">${app.emoji}</span>
+            <div class="rank-badge" id="badge-${app.id}">${isSel ? rank + 1 : ''}</div>
+          </div>
+          <div class="card-body">
+            <div class="card-name">${app.name}</div>
+            <div class="card-desc">${app.desc}</div>
+            <a class="card-link" href="${app.url}" target="_blank" rel="noopener"
+               onclick="event.stopPropagation()">
+              View app
+              <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function updateTray() {
+    const list = document.getElementById('picksList');
+    const hint = document.getElementById('emptyHint');
+    hint.style.display = ranked.length ? 'none' : 'inline';
+
+    // remove old pills
+    list.querySelectorAll('.pick-pill').forEach(p => p.remove());
+
+    ranked.forEach((id, i) => {
+      const app = APPS.find(a => a.id === id);
+      const pill = document.createElement('div');
+      pill.className = 'pick-pill';
+      pill.dataset.id = id;
+      pill.innerHTML = `
+        <span class="rank-num">${i + 1}</span>
+        <span>${app.name}</span>
+        <button onclick="toggleApp(${id})" aria-label="Remove ${app.name}">×</button>`;
+      list.appendChild(pill);
+    });
+
+    // progress
+    const pct = (ranked.length / MAX_PICKS) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').innerHTML =
+      `<strong>${ranked.length}</strong> of ${MAX_PICKS} selected`;
+
+    document.getElementById('voteBtn').disabled = ranked.length !== MAX_PICKS;
+  }
+
+  function toggleApp(id) {
+    const idx = ranked.indexOf(id);
+    if (idx !== -1) ranked.splice(idx, 1);
+    else if (ranked.length < MAX_PICKS) ranked.push(id);
+    buildGrid();
+    updateTray();
+  }
+
+  function buildFormUrl() {
+    const picks = ranked.map(id => APPS.find(a => a.id === id).name);
+    const base = `https://docs.google.com/forms/d/${FORM_ID}/viewform`;
+    const params = new URLSearchParams();
+    params.set(ENTRY_1ST, picks[0] || '');
+    params.set(ENTRY_2ND, picks[1] || '');
+    params.set(ENTRY_3RD, picks[2] || '');
+    params.set('usp', 'pp_url');
+    return `${base}?${params.toString()}`;
+  }
+
+  function submitVotes() {
+    if (ranked.length !== MAX_PICKS) return;
+    window.open(buildFormUrl(), '_blank', 'noopener');
+  }
+
+  // Init
+  buildGrid();
+  updateTray();
+</script>
+
+<!--
+  ================================================================
+  QUICK-START GUIDE — GitHub Pages deployment
+  ================================================================
+
+  1. FILL IN YOUR APP DATA
+     In the APPS array near the top of the <script> block, replace
+     each "App Name N", description, URL, and emoji with your real
+     submission details.
+
+  2. SET UP YOUR GOOGLE FORM
+     a. Go to forms.google.com → create a new form.
+     b. Add three questions, all "Dropdown" type:
+          - "1st choice"
+          - "2nd choice"
+          - "3rd choice"
+        For each, add all 10 app names as options (they must match
+        exactly what you put in the APPS array above).
+     c. Click ⋮ → "Get pre-filled link".
+     d. Pick any dummy values for each dropdown → click "Get Link".
+     e. The URL contains your FORM_ID and entry.XXXXXXXXX IDs.
+        Copy them into FORM_ID, ENTRY_1ST, ENTRY_2ND, ENTRY_3RD.
+
+  3. DEPLOY TO GITHUB PAGES
+     a. Create a new GitHub repository (can be private or public).
+     b. Upload this file — rename it index.html if it isn't already.
+     c. Go to Settings → Pages → Source: "Deploy from a branch"
+        → select "main" branch → root (/) → Save.
+     d. Your voting page will be live at:
+        https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/
+     e. Share that URL on your Google Site with a big "Vote now" button.
+
+  4. OPTIONAL CUSTOMISATION
+     - Change the page title in <title> and the <h1>.
+     - Swap the Google Font imports for different typefaces.
+     - Adjust the --thumb-* background colors to match your brand.
+  ================================================================
+-->
+
+</body>
+</html>
