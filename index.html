@@ -406,6 +406,106 @@
     .thumb-8 { background: rgba(99,102,241,0.12); }
     .thumb-9 { background: rgba(249,115,22,0.12); }
 
+
+
+    /* =============================================
+       CATEGORY TABS + OFFICE SECTIONS
+       ============================================= */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .tab-btn {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: rgba(232,230,225,0.62);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+    }
+
+    .tab-btn:hover {
+      color: #f5f3ee;
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.18);
+      transform: translateY(-1px);
+    }
+
+    .tab-btn.active {
+      color: #fff;
+      background: rgba(124,58,237,0.22);
+      border-color: rgba(124,58,237,0.65);
+    }
+
+    .office-section {
+      margin-bottom: 56px;
+    }
+
+    .office-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .office-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(26px, 3vw, 36px);
+      font-weight: 400;
+      color: #f5f3ee;
+    }
+
+    .office-meta {
+      font-size: 12px;
+      color: rgba(232,230,225,0.38);
+      white-space: nowrap;
+    }
+
+    .section-note {
+      margin-top: -8px;
+      margin-bottom: 24px;
+      color: rgba(232,230,225,0.45);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+
+    .office-submit-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: -18px;
+      margin-bottom: 10px;
+    }
+
+    .office-submit-hint {
+      font-size: 12px;
+      color: rgba(232,230,225,0.38);
+      margin-right: 12px;
+      align-self: center;
+    }
+
+    .tray-office-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tray-office-buttons .vote-btn {
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+
     /* =============================================
        RESPONSIVE
        ============================================= */
@@ -422,161 +522,390 @@
 
   <header>
     <div class="eyebrow">Community Vote</div>
-    <h1>Vote for your <em>favourite</em> web apps</h1>
-    <p>Browse all 10 submissions below. Select your <strong>top 3</strong> in order — your first pick earns the most points. Then submit your ranked votes.</p>
+    <h1>Vote for your <em>favourite</em> submissions</h1>
+    <p>Choose a category, browse the top 10 submissions for each office, and select your <strong>top 3 from each office</strong> in order. Your first pick earns the most points.</p>
   </header>
+
+  <div class="tabs" id="categoryTabs" aria-label="Voting categories"></div>
 
   <div class="progress-section">
     <div class="progress-track">
       <div class="progress-fill" id="progressFill"></div>
     </div>
-    <div class="progress-text" id="progressText"><strong>0</strong> of 3 selected</div>
+    <div class="progress-text" id="progressText"><strong>0</strong> of 9 selected</div>
   </div>
 
-  <div class="grid-label">All submissions</div>
-  <div class="apps-grid" id="appsGrid"></div>
+  <div class="section-note" id="sectionNote"></div>
+  <div id="officeSections"></div>
 
 </div>
 
 <!-- Fixed bottom tray -->
 <div class="tray">
   <div class="tray-picks">
-    <span class="tray-label">Your picks</span>
+    <span class="tray-label">Your current picks</span>
     <div class="picks-list" id="picksList">
       <span class="empty-hint" id="emptyHint">None selected yet</span>
     </div>
   </div>
-  <button class="vote-btn" id="voteBtn" disabled onclick="submitVotes()">
-    Submit votes
-    <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-  </button>
+  <div class="tray-office-buttons" id="trayOfficeButtons" aria-label="Submit votes by office"></div>
 </div>
 
 <script>
   /* =============================================
-     ✏️  STEP 1 — Replace these with your real app data
+     ✏️ STEP 1 — Replace these placeholder submissions
+        Each category has 3 offices: Nairobi, Vientiane, Phnom Penh.
+        Each office has its own top 10 submissions.
      ============================================= */
-  const APPS = [
-    { id: 1, name: "App Name 1",  desc: "Short description of what this app does.",          url: "https://your-app-1-url.com",  emoji: "🚀" },
-    { id: 2, name: "App Name 2",  desc: "Short description of what this app does.",          url: "https://your-app-2-url.com",  emoji: "🌱" },
-    { id: 3, name: "App Name 3",  desc: "Short description of what this app does.",          url: "https://your-app-3-url.com",  emoji: "🗺️" },
-    { id: 4, name: "App Name 4",  desc: "Short description of what this app does.",          url: "https://your-app-4-url.com",  emoji: "🎨" },
-    { id: 5, name: "App Name 5",  desc: "Short description of what this app does.",          url: "https://your-app-5-url.com",  emoji: "🍽️" },
-    { id: 6, name: "App Name 6",  desc: "Short description of what this app does.",          url: "https://your-app-6-url.com",  emoji: "⏱️" },
-    { id: 7, name: "App Name 7",  desc: "Short description of what this app does.",          url: "https://your-app-7-url.com",  emoji: "📅" },
-    { id: 8, name: "App Name 8",  desc: "Short description of what this app does.",          url: "https://your-app-8-url.com",  emoji: "🏆" },
-    { id: 9, name: "App Name 9",  desc: "Short description of what this app does.",          url: "https://your-app-9-url.com",  emoji: "🎵" },
-    { id:10, name: "App Name 10", desc: "Short description of what this app does.",          url: "https://your-app-10-url.com", emoji: "✈️" },
+  const CATEGORIES = [
+    {
+      id: "web-apps",
+      label: "Personal and Creative",
+      note: "Top 10 Web App submissions by office.",
+      offices: [
+        {
+          id: "nairobi",
+          name: "Nairobi",
+          submissions: [
+            { id: "web-nairobi-1", name: "Nairobi Web App 1", desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: "🚀" },
+            { id: "web-nairobi-2", name: "Nairobi Web App 2", desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: "🌱" },
+            { id: "web-nairobi-3", name: "Nairobi Web App 3", desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: "🗺️" },
+            { id: "web-nairobi-4", name: "Nairobi Web App 4", desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: "🎨" },
+            { id: "web-nairobi-5", name: "Nairobi Web App 5", desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: "🍽️" },
+            { id: "web-nairobi-6", name: "Nairobi Web App 6", desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: "⏱️" },
+            { id: "web-nairobi-7", name: "Nairobi Web App 7", desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: "📅" },
+            { id: "web-nairobi-8", name: "Nairobi Web App 8", desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: "🏆" },
+            { id: "web-nairobi-9", name: "Nairobi Web App 9", desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: "🎵" },
+            { id: "web-nairobi-10", name: "Nairobi Web App 10", desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: "✈️" },
+          ]
+        },
+        {
+          id: "vientiane",
+          name: "Vientiane",
+          submissions: Array.from({ length: 10 }, (_, i) => ({ id: `web-vientiane-${i + 1}`, name: `Vientiane Web App ${i + 1}`, desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: ["💡","🌿","📊","🧩","📝","🔎","🛠️","⭐","🎯","🌏"][i] }))
+        },
+        {
+          id: "phnom-penh",
+          name: "Phnom Penh",
+          submissions: Array.from({ length: 10 }, (_, i) => ({ id: `web-phnom-penh-${i + 1}`, name: `Phnom Penh Web App ${i + 1}`, desc: "Short description of what this submission does.", url: "https://your-app-url.com", emoji: ["🤖","🌻","🧭","🎬","☕","⚡","📌","🥇","🎧","🛫"][i] }))
+        }
+      ]
+    },
+    {
+      id: "training-learning",
+      label: "Training and Learning",
+      note: "Top 10 Training and Learning submissions by office.",
+      offices: [
+        {
+          id: "nairobi",
+          name: "Nairobi",
+          submissions: Array.from({ length: 10 }, (_, i) => ({ id: `training-nairobi-${i + 1}`, name: `Nairobi Training ${i + 1}`, desc: "Short description of this training or learning submission.", url: "https://your-training-url.com", emoji: ["📚","🧠","🎓","📝","💬","🧪","🖥️","📈","🧑‍🏫","🏁"][i] }))
+        },
+        {
+          id: "vientiane",
+          name: "Vientiane",
+          submissions: Array.from({ length: 10 }, (_, i) => ({ id: `training-vientiane-${i + 1}`, name: `Vientiane Training ${i + 1}`, desc: "Short description of this training or learning submission.", url: "https://your-training-url.com", emoji: ["📖","🔤","🧩","🗣️","✅","🧬","💻","📊","👩‍🏫","🎉"][i] }))
+        },
+        {
+          id: "phnom-penh",
+          name: "Phnom Penh",
+          submissions: Array.from({ length: 10 }, (_, i) => ({ id: `training-phnom-penh-${i + 1}`, name: `Phnom Penh Training ${i + 1}`, desc: "Short description of this training or learning submission.", url: "https://your-training-url.com", emoji: ["📘","🧠","🏫","✍️","🗨️","🔬","⌨️","📉","🧑‍🏫","🏅"][i] }))
+        }
+      ]
+    }
   ];
 
   /* =============================================
-     ✏️  STEP 2 — Replace with your Google Form details
-         How to get these:
-         1. Open your Google Form (edit view)
-         2. Click ⋮ menu → "Get pre-filled link"
-         3. Select a dummy answer in each of the 3 dropdown questions
-         4. Click "Get Link" — copy the URL
-         5. The URL looks like:
-            https://docs.google.com/forms/d/FORM_ID/viewform
-              ?entry.111111111=Answer1
-              &entry.222222222=Answer2
-              &entry.333333333=Answer3
-         6. Copy the FORM_ID and the three entry.XXXXXXXXX numbers below
+     ✏️ STEP 2 — Replace with your Google Form details
+        There are 6 forms total: 3 offices x 2 categories.
+        For each category + office form, replace:
+          - formId
+          - choiceEntries[1], choiceEntries[2], choiceEntries[3]
+        The categoryEntry field is optional. Leave it blank if your
+        individual forms do not include a category question.
      ============================================= */
-  const FORM_ID     = "1LzVzil37RZ4_b7g3mPpjAwBE5LjDk8WIcO_8dGMQrvk";       // ← replace
-  const ENTRY_1ST   = "entry.1906744726";    // ← replace (1st choice field)
-  const ENTRY_2ND   = "entry.126899030";    // ← replace (2nd choice field)
-  const ENTRY_3RD   = "entry.1751811812";    // ← replace (3rd choice field)
+  const OFFICE_FORMS = {
+    "web-apps": {
+      nairobi: {
+        formId: "1FAIpQLSd35GwJKN6TvcGLeG0tlKDihYFB0PErE0bG0ob7lDIBn0ToDg",
+        categoryEntry: "",
+        choiceEntries: {
+          1: "entry.1906744726",
+          2: "entry.126899030",
+          3: "entry.1751811812"
+        }
+      },
+      vientiane: {
+        formId: "1FAIpQLSciGUNdjQS1YCEbOFfQkYT4YYi9V5Zcxlfm7I1KZrz4PNkzaw",
+        categoryEntry: "",
+        choiceEntries: {
+          1: "entry.1906744726",
+          2: "entry.126899030",
+          3: "entry.1751811812"
+        }
+      },
+      "phnom-penh": {
+        formId: "1FAIpQLSeL486ENR4VIN0Y51J5KodEc5iDSfFfzFUp60z--D_mTNU5RA",
+        categoryEntry: "",
+        choiceEntries: {
+          1: "entry.1906744726",
+          2: "entry.126899030",
+          3: "entry.1751811812"
+        }
+      }
+    },
+    "training-learning": {
+      nairobi: {
+        formId: "1FAIpQLSfNvUn8HU_J1NGK82OpfA-jp0Yo7AB5QdBRWa8S5QqRqKHEzg",
+        categoryEntry: "",
+        choiceEntries: {
+          1: "entry.1906744726",
+          2: "entry.126899030",
+          3: "entry.1751811812"
+        }
+      },
+      vientiane: {
+        formId: "1FAIpQLSc9Xc-2xNcSgwI1Zwn4M0rI7soZQU3B-oFx4aIi8LBBWiOtgA",
+        categoryEntry: "",
+        choiceEntries: {
+          1: "entry.1906744726",
+          2: "entry.126899030",
+          3: "entry.1751811812"
+        }
+      },
+      "phnom-penh": {
+        formId: "1FAIpQLSeipj3SDkXQL9LJvq_vA3yQSx8Enh-mtMoPL6Blqr-8wUM3TA",
+        categoryEntry: "",
+        choiceEntries: {
+          1: "entry.1906744726",
+          2: "entry.126899030",
+          3: "entry.1751811812"
+        }
+      }
+    }
+  };
 
   /* =============================================
      APP LOGIC — no need to edit below this line
      ============================================= */
-  const MAX_PICKS = 3;
-  const ranked = []; // ordered array of app ids, max 3
+  const MAX_PICKS_PER_OFFICE = 3;
 
-  function buildGrid() {
-    const grid = document.getElementById('appsGrid');
-    grid.innerHTML = APPS.map((app, i) => {
-      const rank = ranked.indexOf(app.id);
-      const isSel = rank !== -1;
-      const isDisabled = !isSel && ranked.length >= MAX_PICKS;
+  function makeEmptyOfficeRanks(category) {
+    return Object.fromEntries(category.offices.map(office => [office.id, []]));
+  }
+
+  let activeCategoryId = CATEGORIES[0].id;
+  const rankedByCategory = Object.fromEntries(CATEGORIES.map(category => [category.id, makeEmptyOfficeRanks(category)]));
+
+  function getActiveCategory() {
+    return CATEGORIES.find(category => category.id === activeCategoryId);
+  }
+
+  function getRankedByOffice() {
+    return rankedByCategory[activeCategoryId];
+  }
+
+  function getTotalRequired(category = getActiveCategory()) {
+    return category.offices.length * MAX_PICKS_PER_OFFICE;
+  }
+
+  function getTotalSelected() {
+    return Object.values(getRankedByOffice()).reduce((total, picks) => total + picks.length, 0);
+  }
+
+  function getCompletedOfficeCount() {
+    return Object.values(getRankedByOffice()).filter(picks => picks.length === MAX_PICKS_PER_OFFICE).length;
+  }
+
+  function hasIncompleteOfficeSelections() {
+    return Object.values(getRankedByOffice()).some(picks => picks.length > 0 && picks.length < MAX_PICKS_PER_OFFICE);
+  }
+
+  function canSubmitVotes() {
+    return getCompletedOfficeCount() > 0 && !hasIncompleteOfficeSelections();
+  }
+
+  function getAllSubmissions(category = getActiveCategory()) {
+    return category.offices.flatMap(office => office.submissions.map(submission => ({ ...submission, officeId: office.id, office: office.name })));
+  }
+
+  function findSubmission(id) {
+    return getAllSubmissions().find(submission => submission.id === id);
+  }
+
+  function buildTabs() {
+    const tabs = document.getElementById('categoryTabs');
+    tabs.innerHTML = CATEGORIES.map(category => `
+      <button class="tab-btn${category.id === activeCategoryId ? ' active' : ''}"
+              onclick="setCategory('${category.id}')"
+              aria-pressed="${category.id === activeCategoryId}">
+        ${category.label}
+      </button>
+    `).join('');
+  }
+
+  function buildOfficeSections() {
+    const category = getActiveCategory();
+    const rankedByOffice = getRankedByOffice();
+    document.getElementById('sectionNote').textContent = category.note;
+
+    document.getElementById('officeSections').innerHTML = category.offices.map(office => {
+      const officeRanked = rankedByOffice[office.id] || [];
       return `
-        <div class="card${isSel ? ' selected' : ''}${isDisabled ? ' disabled' : ''}"
-             id="card-${app.id}"
-             onclick="${isDisabled ? '' : `toggleApp(${app.id})`}"
-             role="checkbox" aria-checked="${isSel}" aria-label="${app.name}">
-          <div class="card-thumb thumb-${i % 10}">
-            <span aria-hidden="true" style="font-size:38px">${app.emoji}</span>
-            <div class="rank-badge" id="badge-${app.id}">${isSel ? rank + 1 : ''}</div>
-          </div>
-          <div class="card-body">
-            <div class="card-name">${app.name}</div>
-            <div class="card-desc">${app.desc}</div>
-            <a class="card-link" href="${app.url}" target="_blank" rel="noopener"
-               onclick="event.stopPropagation()">
-              View app
-              <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            </a>
-          </div>
-        </div>`;
+      <section class="office-section" aria-labelledby="office-${office.id}">
+        <div class="office-header">
+          <h2 class="office-title" id="office-${office.id}">${office.name}</h2>
+          <div class="office-meta">${officeRanked.length} of ${MAX_PICKS_PER_OFFICE} selected · Top 10 submissions</div>
+        </div>
+        <div class="apps-grid">
+          ${office.submissions.map((app, i) => buildCard(app, i, office.id, officeRanked)).join('')}
+        </div>
+        <div class="office-submit-row">
+          <span class="office-submit-hint">${officeRanked.length === MAX_PICKS_PER_OFFICE ? 'Ready to submit' : `Select ${MAX_PICKS_PER_OFFICE - officeRanked.length} more`}</span>
+          <button class="vote-btn"
+                  id="submit-${office.id}"
+                  onclick="submitOfficeVotes('${office.id}')"
+                  ${officeRanked.length !== MAX_PICKS_PER_OFFICE ? 'disabled' : ''}>
+            Submit ${office.name} votes
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </button>
+        </div>
+      </section>`;
     }).join('');
   }
 
-  function updateTray() {
-    const list = document.getElementById('picksList');
-    const hint = document.getElementById('emptyHint');
-    hint.style.display = ranked.length ? 'none' : 'inline';
-
-    // remove old pills
-    list.querySelectorAll('.pick-pill').forEach(p => p.remove());
-
-    ranked.forEach((id, i) => {
-      const app = APPS.find(a => a.id === id);
-      const pill = document.createElement('div');
-      pill.className = 'pick-pill';
-      pill.dataset.id = id;
-      pill.innerHTML = `
-        <span class="rank-num">${i + 1}</span>
-        <span>${app.name}</span>
-        <button onclick="toggleApp(${id})" aria-label="Remove ${app.name}">×</button>`;
-      list.appendChild(pill);
-    });
-
-    // progress
-    const pct = (ranked.length / MAX_PICKS) * 100;
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressText').innerHTML =
-      `<strong>${ranked.length}</strong> of ${MAX_PICKS} selected`;
-
-    document.getElementById('voteBtn').disabled = ranked.length !== MAX_PICKS;
+  function buildCard(app, i, officeId, officeRanked) {
+    const rank = officeRanked.indexOf(app.id);
+    const isSel = rank !== -1;
+    const isDisabled = !isSel && officeRanked.length >= MAX_PICKS_PER_OFFICE;
+    return `
+      <div class="card${isSel ? ' selected' : ''}${isDisabled ? ' disabled' : ''}"
+           id="card-${app.id}"
+           onclick="${isDisabled ? '' : `toggleSubmission('${officeId}', '${app.id}')`}"
+           role="checkbox" aria-checked="${isSel}" aria-label="${app.name}">
+        <div class="card-thumb thumb-${i % 10}">
+          <span aria-hidden="true" style="font-size:38px">${app.emoji}</span>
+          <div class="rank-badge" id="badge-${app.id}">${isSel ? rank + 1 : ''}</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">${app.name}</div>
+          <div class="card-desc">${app.desc}</div>
+          <a class="card-link" href="${app.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            View submission
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>`;
   }
 
-  function toggleApp(id) {
-    const idx = ranked.indexOf(id);
-    if (idx !== -1) ranked.splice(idx, 1);
-    else if (ranked.length < MAX_PICKS) ranked.push(id);
-    buildGrid();
+  function setCategory(categoryId) {
+    activeCategoryId = categoryId;
+    buildTabs();
+    buildOfficeSections();
     updateTray();
   }
 
-  function buildFormUrl() {
-    const picks = ranked.map(id => APPS.find(a => a.id === id).name);
-    const base = `https://docs.google.com/forms/d/${FORM_ID}/viewform`;
+  function updateTray() {
+    const rankedByOffice = getRankedByOffice();
+    const totalSelected = getTotalSelected();
+    const totalRequired = getTotalRequired();
+    const list = document.getElementById('picksList');
+    const hint = document.getElementById('emptyHint');
+    hint.style.display = totalSelected ? 'none' : 'inline';
+
+    list.querySelectorAll('.pick-pill').forEach(p => p.remove());
+
+    getActiveCategory().offices.forEach(office => {
+      const ranked = rankedByOffice[office.id] || [];
+      ranked.forEach((id, i) => {
+        const submission = findSubmission(id);
+        const pill = document.createElement('div');
+        pill.className = 'pick-pill';
+        pill.dataset.id = id;
+        pill.innerHTML = `
+          <span class="rank-num">${i + 1}</span>
+          <span>${office.name}: ${submission.name}</span>
+          <button onclick="toggleSubmission('${office.id}', '${id}')" aria-label="Remove ${submission.name}">×</button>`;
+        list.appendChild(pill);
+      });
+    });
+
+    const pct = (totalSelected / totalRequired) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    const completedOffices = getCompletedOfficeCount();
+    document.getElementById('progressText').innerHTML =
+      `<strong>${totalSelected}</strong> of ${totalRequired} selected · <strong>${completedOffices}</strong> office${completedOffices === 1 ? '' : 's'} ready`;
+
+    renderTrayOfficeButtons();
+  }
+
+  function renderTrayOfficeButtons() {
+    const container = document.getElementById('trayOfficeButtons');
+    if (!container) return;
+
+    const rankedByOffice = getRankedByOffice();
+    container.innerHTML = getActiveCategory().offices.map(office => {
+      const selectedCount = (rankedByOffice[office.id] || []).length;
+      const isReady = selectedCount === MAX_PICKS_PER_OFFICE;
+      return `
+        <button class="vote-btn"
+                id="tray-submit-${office.id}"
+                onclick="submitOfficeVotes('${office.id}')"
+                ${isReady ? '' : 'disabled'}>
+          Submit ${office.name}
+        </button>`;
+    }).join('');
+  }
+
+  function toggleSubmission(officeId, id) {
+    const ranked = getRankedByOffice()[officeId];
+    const idx = ranked.indexOf(id);
+    if (idx !== -1) ranked.splice(idx, 1);
+    else if (ranked.length < MAX_PICKS_PER_OFFICE) ranked.push(id);
+    buildOfficeSections();
+    updateTray();
+  }
+
+  function buildOfficeFormUrl(officeId) {
+    const category = getActiveCategory();
+    const office = category.offices.find(item => item.id === officeId);
+    const ranked = getRankedByOffice()[officeId] || [];
+    const formConfig = OFFICE_FORMS[category.id]?.[officeId];
+
+    if (!formConfig) {
+      alert(`Missing Google Form configuration for ${category.label} / ${office ? office.name : officeId}.`);
+      return null;
+    }
+
+    const base = `https://docs.google.com/forms/d/${formConfig.formId}/viewform`;
     const params = new URLSearchParams();
-    params.set(ENTRY_1ST, picks[0] || '');
-    params.set(ENTRY_2ND, picks[1] || '');
-    params.set(ENTRY_3RD, picks[2] || '');
+
+    if (formConfig.categoryEntry) {
+      params.set(formConfig.categoryEntry, category.label);
+    }
+
+    ranked.forEach((id, i) => {
+      const submission = findSubmission(id);
+      const entryId = formConfig.choiceEntries[i + 1];
+      if (entryId) params.set(entryId, `${office.name} — ${submission.name}`);
+    });
+
     params.set('usp', 'pp_url');
     return `${base}?${params.toString()}`;
   }
 
-  function submitVotes() {
-    if (ranked.length !== MAX_PICKS) return;
-    window.open(buildFormUrl(), '_blank', 'noopener');
+  function submitOfficeVotes(officeId) {
+    const ranked = getRankedByOffice()[officeId] || [];
+    if (ranked.length !== MAX_PICKS_PER_OFFICE) return;
+
+    const formUrl = buildOfficeFormUrl(officeId);
+    if (!formUrl) return;
+
+    window.open(formUrl, '_blank', 'noopener');
   }
 
-  // Init
-  buildGrid();
+  buildTabs();
+  buildOfficeSections();
   updateTray();
 </script>
 
@@ -590,18 +919,19 @@
      each "App Name N", description, URL, and emoji with your real
      submission details.
 
-  2. SET UP YOUR GOOGLE FORM
-     a. Go to forms.google.com → create a new form.
-     b. Add three questions, all "Dropdown" type:
+  2. SET UP YOUR GOOGLE FORMS
+     a. Go to forms.google.com → create three forms: one for Nairobi, one for Vientiane, and one for Phnom Penh.
+     b. In each form, add three questions, all "Dropdown" type:
           - "1st choice"
           - "2nd choice"
           - "3rd choice"
+          - "Phnom Penh 1st choice", "Phnom Penh 2nd choice", "Phnom Penh 3rd choice"
         For each, add all 10 app names as options (they must match
         exactly what you put in the APPS array above).
      c. Click ⋮ → "Get pre-filled link".
      d. Pick any dummy values for each dropdown → click "Get Link".
-     e. The URL contains your FORM_ID and entry.XXXXXXXXX IDs.
-        Copy them into FORM_ID, ENTRY_1ST, ENTRY_2ND, ENTRY_3RD.
+     e. Each URL contains that office formId and entry.XXXXXXXXX IDs.
+        Copy them into OFFICE_FORMS for the matching category and office.
 
   3. DEPLOY TO GITHUB PAGES
      a. Create a new GitHub repository (can be private or public).
