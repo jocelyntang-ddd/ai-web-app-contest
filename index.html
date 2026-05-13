@@ -595,7 +595,7 @@
             { id: "web-laos-3", name: "Laos-explore", desc: "An app that helps tourists and locals easily find and explore places, saving time and making travel more convenient.", url: "https://laos-explore-go.base44.app", emoji: "🗺️" },
             { id: "web-laos-4", name: "Luxe PMS", desc: "A hotel management system that automates manual workflows to reduce errors, prevent double bookings, and improve service efficiency.", url: "https://lao-stay-flow.base44.app", emoji: "🏨" },
             { id: "web-laos-5", name: "Dream Prediction", desc: "An app for predicting and interpreting your dreams each night.", url: "https://mystic-dream-path.base44.app", emoji: "🔮" },
-            { id: "web-laos-6", name: "ZenBudget", desc: "A multi-user app for tracking monthly income and expenses, managing budgets, and avoiding overspending.", url: "https://lively-zen-budget-flow.base44.app", emoji: "💰" },
+            { id: "web-laos-6", name: "ZenBudget ₭", desc: "A multi-user app for tracking monthly income and expenses, managing budgets, and avoiding overspending.", url: "https://lively-zen-budget-flow.base44.app", emoji: "💰" },
             { id: "web-laos-7", name: "How R U Today?", desc: "A mindful check-in app for staff to reflect on daily emotions through short journals, AI-powered suggestions, and sending support to friends in the community.", url: "https://how-r-u-today.base44.app", emoji: "💙" },
             { id: "web-laos-8", name: "Dorm Manager", desc: "An app for calculating electricity, water, and trash bills per room — easy to share with roommates and for apartment owners to manage.", url: "https://primitive-smart-bill-flow.base44.app", emoji: "🏠" },
             { id: "web-laos-9", name: "VF Barbershop", desc: "An application for recording and tracking barbershop income.", url: "https://vf-style-spot.base44.app", emoji: "💈" },
@@ -983,7 +983,14 @@
     const ranked = getRankedByOffice()[officeId] || [];
     const formConfig = OFFICE_FORMS[category.id]?.[officeId];
 
+    console.group(`[buildOfficeFormUrl] officeId="${officeId}"`);
+    console.log('category.id:', category.id);
+    console.log('ranked IDs:', ranked);
+    console.log('formConfig:', formConfig);
+
     if (!formConfig) {
+      console.error('❌ No formConfig found for', category.id, officeId);
+      console.groupEnd();
       alert(`Missing Google Form configuration for ${category.label} / ${office ? office.name : officeId}.`);
       return null;
     }
@@ -993,25 +1000,43 @@
 
     if (formConfig.categoryEntry) {
       parts.push(`${formConfig.categoryEntry}=${encodeURIComponent(category.label)}`);
+      console.log('categoryEntry part:', parts[parts.length - 1]);
     }
 
     ranked.forEach((id, i) => {
       const submission = findSubmission(id);
       const entryId = formConfig.choiceEntries[i + 1];
-      if (entryId) parts.push(`${entryId}=${encodeURIComponent(submission.name)}`);
+      console.log(`choice ${i + 1}: id="${id}", submission=`, submission, `entryId="${entryId}"`);
+      if (!submission) console.warn(`⚠️ No submission found for id="${id}"`);
+      if (!entryId) console.warn(`⚠️ No entryId for choiceEntries[${i + 1}]`);
+      if (entryId && submission) parts.push(`${entryId}=${encodeURIComponent(submission.name)}`);
     });
 
-    return parts.length ? `${base}&${parts.join('&')}` : base;
+    const url = parts.length ? `${base}&${parts.join('&')}` : base;
+    console.log('✅ Final URL:', url);
+    console.groupEnd();
+    return url;
   }
 
   function submitOfficeVotes(officeId) {
     const ranked = getRankedByOffice()[officeId] || [];
-    if (ranked.length !== MAX_PICKS_PER_OFFICE) return;
+    console.log(`[submitOfficeVotes] officeId="${officeId}", ranked:`, ranked);
+    if (ranked.length !== MAX_PICKS_PER_OFFICE) {
+      console.warn(`⚠️ Not enough picks: ${ranked.length}/${MAX_PICKS_PER_OFFICE}`);
+      return;
+    }
 
     const formUrl = buildOfficeFormUrl(officeId);
     if (!formUrl) return;
 
-    window.open(formUrl, '_blank', 'noopener');
+    console.log('Opening URL:', formUrl);
+    const a = document.createElement('a');
+    a.href = formUrl;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   buildTabs();
