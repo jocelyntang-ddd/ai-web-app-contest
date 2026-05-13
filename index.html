@@ -998,7 +998,7 @@
     ranked.forEach((id, i) => {
       const submission = findSubmission(id);
       const entryId = formConfig.choiceEntries[i + 1];
-      if (entryId) params.set(entryId, `${office.name} — ${submission.name}`);
+      if (entryId) params.set(entryId, `${submission.name}`);
     });
 
     params.set('usp', 'pp_url');
