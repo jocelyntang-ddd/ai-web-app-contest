@@ -988,21 +988,20 @@
       return null;
     }
 
-    const base = `https://docs.google.com/forms/d/e/${formConfig.formId}/viewform?usp=pp_url&`;
-    const params = new URLSearchParams();
+    const base = `https://docs.google.com/forms/d/e/${formConfig.formId}/viewform?usp=pp_url`;
+    const parts = [];
 
     if (formConfig.categoryEntry) {
-      params.set(formConfig.categoryEntry, category.label);
+      parts.push(`${formConfig.categoryEntry}=${encodeURIComponent(category.label)}`);
     }
 
     ranked.forEach((id, i) => {
       const submission = findSubmission(id);
       const entryId = formConfig.choiceEntries[i + 1];
-      if (entryId) params.set(entryId, `${submission.name}`);
+      if (entryId) parts.push(`${entryId}=${encodeURIComponent(submission.name)}`);
     });
 
-    params.set('usp', 'pp_url');
-    return `${base}?${params.toString()}`;
+    return parts.length ? `${base}&${parts.join('&')}` : base;
   }
 
   function submitOfficeVotes(officeId) {
