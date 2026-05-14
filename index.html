@@ -563,6 +563,18 @@
      ✏️ STEP 1 — Replace these placeholder submissions
         Each category has 3 offices: Nairobi, Vientiane, Phnom Penh.
         Each office has its own top 10 submissions.
+
+        Each submission supports these fields:
+          id:    unique string identifier (don't change after publishing)
+          name:  display name shown on the card
+          desc:  short description shown on the card
+          url:   link opened by "View submission"
+          emoji: fallback icon (used only if image is blank)
+          image: path or URL to a screenshot/thumbnail for this submission.
+                 Examples:
+                   image: "images/my-app.png"   ← file in same folder as index.html
+                   image: "https://example.com/screenshot.png"  ← hosted image
+                 Leave as "" to show the auto-generated coloured placeholder.
      ============================================= */
   const CATEGORIES = [
     {
@@ -574,44 +586,44 @@
           id: "nairobi",
           name: "Nairobi",
           submissions: [
-            { id: "web-nairobi-1", name: "VoxBarz", desc: "The app helps young Kenyan and East African creators record vocals, add beats, and apply studio-style effects on their phones, solving the problem of not having access to a professional music studio or expensive production tools.", url: "https://successful-rhyme-flow-lab.base44.app", emoji: "🚀" },
-            { id: "web-nairobi-2", name: "SuitUp", desc: "The suitup helps people who wear suits and formal wear every now and then, plus also who have never worn one. It will help both to navigate easily during the week or even for a first timer to have an easy time picking a suit or a formal suit for both a lady and a man.", url: "https://swinging-suit-style-sync.base44.app", emoji: "🌱" },
-            { id: "web-nairobi-3", name: "DESKDEFY", desc: "DeskDefy provides quick, no-equipment home workouts and desk-friendly stretches to help office workers overcome the physical toll of a sedentary workday and stay fit without needing a gym.", url: "https://deskdefy-fitness.vercel.app/", emoji: "🗺️" },
-            { id: "web-nairobi-4", name: "MrumbaCanvas Filters Pro", desc: "This app is a modern browser-based image editor that lets users quickly upload, enhance, draw on, and export images with filters, text, and tools, eliminating the need for complex or expensive design software..", url: "https://mrumba-canvas-image-filters-pro.base44.app/", emoji: "🎨" },
-            { id: "web-nairobi-5", name: "SYNAPSE", desc: "https://level-up-sprint.base44.app", url: "https://level-up-sprint.base44.app", emoji: "🍽️" },
-            { id: "web-nairobi-6", name: "Earthen Thread Shop", desc: "The app showcases and sells Kenyan Ankara, decor, and jewellery to UK customers through curated, culturally inspired product recommendations.", url: "https://earthen-thread-shop.base44.app", emoji: "⏱️" },
-            { id: "web-nairobi-7", name: "LinkingshopX", desc: "It offers different products that most people are in need of in ease and brings about trustworthy to clients using it avoiding buying fake products or be scammed.", url: "https://global-futuristic-trade-flow.base44.app", emoji: "📅" },
-            { id: "web-nairobi-8", name: "Save Wise", desc: "The app helps users develop disciplined saving habits by simplifying goal-setting, tracking progress, and providing personalized insights, addressing the challenge of inconsistent saving and poor financial management.", url: "https://flow-save-bloom.base44.app", emoji: "🏆" },
-            { id: "web-nairobi-9", name: "Decors by Vv", desc: "It's all about accessing beautiful places for the activities in the app.", url: "https://vivid-decor-flow.base44.app/", emoji: "🎵" },
-            { id: "web-nairobi-10", name: "Sauti ya Ground", desc: "Sauti ya Ground is a secure digital platform that enables Kenyans to vote, participate in opinion polls and mock elections, and view real-time results—solving the problem of limited access to transparent, inclusive, and timely civic engagement.", url: "https://sauti-ground-vote.base44.app/", emoji: "✈️" },
+            { id: "web-nairobi-1", name: "VoxBarz", desc: "The app helps young Kenyan and East African creators record vocals, add beats, and apply studio-style effects on their phones, solving the problem of not having access to a professional music studio or expensive production tools.", url: "https://successful-rhyme-flow-lab.base44.app", emoji: "🚀", image: "images/voxbarz.png" },
+            { id: "web-nairobi-2", name: "SuitUp", desc: "The suitup helps people who wear suits and formal wear every now and then, plus also who have never worn one. It will help both to navigate easily during the week or even for a first timer to have an easy time picking a suit or a formal suit for both a lady and a man.", url: "https://swinging-suit-style-sync.base44.app", emoji: "🌱", image: "images/suitup.png" },
+            { id: "web-nairobi-3", name: "DESKDEFY", desc: "DeskDefy provides quick, no-equipment home workouts and desk-friendly stretches to help office workers overcome the physical toll of a sedentary workday and stay fit without needing a gym.", url: "https://deskdefy-fitness.vercel.app/", emoji: "🗺️", image: "images/deskdefy.png" },
+            { id: "web-nairobi-4", name: "MrumbaCanvas Filters Pro", desc: "This app is a modern browser-based image editor that lets users quickly upload, enhance, draw on, and export images with filters, text, and tools, eliminating the need for complex or expensive design software..", url: "https://mrumba-canvas-image-filters-pro.base44.app/", emoji: "🎨", image: "images/mrumba.png" },
+            { id: "web-nairobi-5", name: "SYNAPSE", desc: "https://level-up-sprint.base44.app", url: "https://level-up-sprint.base44.app", emoji: "🍽️", image: "images/synapse.png" },
+            { id: "web-nairobi-6", name: "Earthen Thread Shop", desc: "The app showcases and sells Kenyan Ankara, decor, and jewellery to UK customers through curated, culturally inspired product recommendations.", url: "https://earthen-thread-shop.base44.app", emoji: "⏱️", image: "images/earthen.png" },
+            { id: "web-nairobi-7", name: "LinkingshopX", desc: "It offers different products that most people are in need of in ease and brings about trustworthy to clients using it avoiding buying fake products or be scammed.", url: "https://global-futuristic-trade-flow.base44.app", emoji: "📅", image: "images/linkingshop.png" },
+            { id: "web-nairobi-8", name: "Save Wise", desc: "The app helps users develop disciplined saving habits by simplifying goal-setting, tracking progress, and providing personalized insights, addressing the challenge of inconsistent saving and poor financial management.", url: "https://flow-save-bloom.base44.app", emoji: "🏆", image: "images/savewise.png" },
+            { id: "web-nairobi-9", name: "Decors by Vv", desc: "It's all about accessing beautiful places for the activities in the app.", url: "https://vivid-decor-flow.base44.app/", emoji: "🎵", image: "images/decors.png" },
+            { id: "web-nairobi-10", name: "Sauti ya Ground", desc: "Sauti ya Ground is a secure digital platform that enables Kenyans to vote, participate in opinion polls and mock elections, and view real-time results—solving the problem of limited access to transparent, inclusive, and timely civic engagement.", url: "https://sauti-ground-vote.base44.app/", emoji: "✈️", image: "images/sauti.png" },
           ]
         },
         {
           id: "vientiane",
           name: "Vientiane",
           submissions: [
-            { id: "web-laos-1", name: "Kick Lao Booking App", desc: "A mobile platform for finding, booking, and paying for football fields in Laos — plus a dashboard for field owners to manage bookings.", url: "https://kicklao-fieldfinder.lovable.app", emoji: "⚽" },
-            { id: "web-laos-2", name: "Laos: Simply Beautiful Journeys", desc: "A digital travel companion for exploring all 18 provinces of Laos, with planning tools, currency exchange, weather, daily Lao language learning, and direct access to local guides.", url: "https://simply-laos-journeys.base44.app", emoji: "🌏" },
-            { id: "web-laos-3", name: "Laos-explore", desc: "An app that helps tourists and locals easily find and explore places, saving time and making travel more convenient.", url: "https://laos-explore-go.base44.app", emoji: "🗺️" },
-            { id: "web-laos-4", name: "Luxe PMS", desc: "A hotel management system that automates manual workflows to reduce errors, prevent double bookings, and improve service efficiency.", url: "https://lao-stay-flow.base44.app", emoji: "🏨" },
-            { id: "web-laos-5", name: "Dream Prediction", desc: "An app for predicting and interpreting your dreams each night.", url: "https://mystic-dream-path.base44.app", emoji: "🔮" },
-            { id: "web-laos-6", name: "ZenBudget ₭", desc: "A multi-user app for tracking monthly income and expenses, managing budgets, and avoiding overspending.", url: "https://lively-zen-budget-flow.base44.app", emoji: "💰" },
-            { id: "web-laos-7", name: "How R U Today?", desc: "A mindful check-in app for staff to reflect on daily emotions through short journals, AI-powered suggestions, and sending support to friends in the community.", url: "https://how-r-u-today.base44.app", emoji: "💙" },
-            { id: "web-laos-8", name: "Dorm Manager", desc: "An app for calculating electricity, water, and trash bills per room — easy to share with roommates and for apartment owners to manage.", url: "https://primitive-smart-bill-flow.base44.app", emoji: "🏠" },
-            { id: "web-laos-9", name: "VF Barbershop", desc: "An application for recording and tracking barbershop income.", url: "https://vf-style-spot.base44.app", emoji: "💈" },
-            { id: "web-laos-10", name: "Check 4", desc: "An app that helps users verify the risk level of accounts and QR codes before transferring money, reducing online fraud.", url: "https://check-4-207f110b.base44.app", emoji: "🔒" },
+            { id: "web-laos-1", name: "Kick Lao Booking App", desc: "A mobile platform for finding, booking, and paying for football fields in Laos — plus a dashboard for field owners to manage bookings.", url: "https://kicklao-fieldfinder.lovable.app", emoji: "⚽", image: "images/kicklao.png" },
+            { id: "web-laos-2", name: "Laos: Simply Beautiful Journeys", desc: "A digital travel companion for exploring all 18 provinces of Laos, with planning tools, currency exchange, weather, daily Lao language learning, and direct access to local guides.", url: "https://simply-laos-journeys.base44.app", emoji: "🌏", image: "images/laos-journeys.png" },
+            { id: "web-laos-3", name: "Laos-explore", desc: "An app that helps tourists and locals easily find and explore places, saving time and making travel more convenient.", url: "https://laos-explore-go.base44.app", emoji: "🗺️", image: "images/laos-explorer.png" },
+            { id: "web-laos-4", name: "Luxe PMS", desc: "A hotel management system that automates manual workflows to reduce errors, prevent double bookings, and improve service efficiency.", url: "https://lao-stay-flow.base44.app", emoji: "🏨", image: "images/luxe.png" },
+            { id: "web-laos-5", name: "Dream Prediction", desc: "An app for predicting and interpreting your dreams each night.", url: "https://mystic-dream-path.base44.app", emoji: "🔮", image: "images/dreams.png" },
+            { id: "web-laos-6", name: "ZenBudget", desc: "A multi-user app for tracking monthly income and expenses, managing budgets, and avoiding overspending.", url: "https://lively-zen-budget-flow.base44.app", emoji: "💰", image: "images/budget.png" },
+            { id: "web-laos-7", name: "How R U Today?", desc: "A mindful check-in app for staff to reflect on daily emotions through short journals, AI-powered suggestions, and sending support to friends in the community.", url: "https://how-r-u-today.base44.app", emoji: "💙", image: "images/howareyou.png" },
+            { id: "web-laos-8", name: "Dorm Manager", desc: "An app for calculating electricity, water, and trash bills per room — easy to share with roommates and for apartment owners to manage.", url: "https://primitive-smart-bill-flow.base44.app", emoji: "🏠", image: "images/dorm-manager.png" },
+            { id: "web-laos-9", name: "VF Barbershop", desc: "An application for recording and tracking barbershop income.", url: "https://vf-style-spot.base44.app", emoji: "💈", image: "images/barber.png" },
+            { id: "web-laos-10", name: "Check 4", desc: "An app that helps users verify the risk level of accounts and QR codes before transferring money, reducing online fraud.", url: "https://check-4-207f110b.base44.app", emoji: "🔒", image: "images/check4.png" },
           ]
         },
         {
           id: "phnom-penh",
           name: "Phnom Penh",
       submissions: [
-        { id: "web-cambodia-1", name: "NeuroFlow AI", desc: "An AI-powered tool that helps users overcome overthinking and disorganization by intelligently planning, prioritizing, and guiding daily tasks.", url: "https://pistachio-neuro-flow-ai.base44.app", emoji: "🧠" },
-        { id: "web-cambodia-2", name: "DDD Payroll", desc: "A payroll management app that automates employee record keeping, attendance tracking, salary calculations, and payslip generation to reduce manual HR work.", url: "https://friendly-pay-flow-hq.base44.app", emoji: "💼" },
-        { id: "web-cambodia-3", name: "FinanceApp", desc: "An app for tracking income and expenses, managing budgets, and gaining clear financial visibility — all in one secure and simple dashboard.", url: "https://fin-management.base44.app/", emoji: "💰" },
-        { id: "web-cambodia-4", name: "Lifepath", desc: "An AI-powered life planner that helps users organize daily tasks and long-term goals with smart scheduling and prioritization.", url: "https://wandering-serene-life-flow.base44.app/", emoji: "🗓️" },
-        { id: "web-cambodia-5", name: "Base44", desc: "An app that helps people stay disciplined, track their personal growth, and gradually improve their lives in a structured and rewarding way.", url: "https://blond-sync-your-life.base44.app", emoji: "📈" },
-        { id: "web-cambodia-6", name: "CelestialRealm Anime", desc: "A one-stop platform for browsing, searching, and streaming anime series and movies, eliminating the need to visit multiple sites to find content.", url: "https://garrulous-nebula-stream-hub.base44.app", emoji: "🎌" },
+        { id: "web-cambodia-1", name: "NeuroFlow AI", desc: "An AI-powered tool that helps users overcome overthinking and disorganization by intelligently planning, prioritizing, and guiding daily tasks.", url: "https://pistachio-neuro-flow-ai.base44.app", emoji: "🧠", image: "images/neuro.png" },
+        { id: "web-cambodia-2", name: "DDD Payroll", desc: "A payroll management app that automates employee record keeping, attendance tracking, salary calculations, and payslip generation to reduce manual HR work.", url: "https://friendly-pay-flow-hq.base44.app", emoji: "💼", image: "images/payroll.png" },
+        { id: "web-cambodia-3", name: "FinanceApp", desc: "An app for tracking income and expenses, managing budgets, and gaining clear financial visibility — all in one secure and simple dashboard.", url: "https://fin-management.base44.app/", emoji: "💰", image: "images/finance.png" },
+        { id: "web-cambodia-4", name: "Lifepath", desc: "An AI-powered life planner that helps users organize daily tasks and long-term goals with smart scheduling and prioritization.", url: "https://wandering-serene-life-flow.base44.app/", emoji: "🗓️", image: "images/lifepath.png" },
+        { id: "web-cambodia-5", name: "Base44", desc: "An app that helps people stay disciplined, track their personal growth, and gradually improve their lives in a structured and rewarding way.", url: "https://blond-sync-your-life.base44.app", emoji: "📈", image: "images/base44.png" },
+        { id: "web-cambodia-6", name: "CelestialRealm Anime", desc: "A one-stop platform for browsing, searching, and streaming anime series and movies, eliminating the need to visit multiple sites to find content.", url: "https://garrulous-nebula-stream-hub.base44.app", emoji: "🎌", image: "images/anime.png" },
       ]        
       }
       ]
@@ -625,48 +637,48 @@
           id: "nairobi",
           name: "Nairobi",
           submissions: [
-            { id: "training-nairobi-1", name: "DDD Learning Hub", desc: "An online learning platform giving DDD staff access to structured courses on Machine Learning and Artificial Intelligence.", url: "https://ddd-learn-path.base44.app", emoji: "🤖" },
-            { id: "training-nairobi-2", name: "DDD RuleSync", desc: "A centralized platform that keeps data annotators and project teams aligned by consolidating project guidelines and instantly notifying users of rule changes.", url: "https://ddd-guideflow-37c98203.base44.app/", emoji: "🔔" },
-            { id: "training-nairobi-3", name: "Meet Insights.AI", desc: "An AI tool that transforms meeting notes and transcripts into clear summaries, actionable tasks, and quizzes to improve team understanding and productivity.", url: "https://meet-mind-ai-749e5430.base44.app", emoji: "🗒️" },
-            { id: "training-nairobi-4", name: "DDD New Joiner Onboarding Portal", desc: "A guided onboarding portal that walks new staff through key IT modules including email setup, browser usage, eTIMS invoicing, cybersecurity awareness, and common troubleshooting.", url: "https://ddd-onboard-buddy.lovable.app/", emoji: "🚀" },
-            { id: "training-nairobi-5", name: "Cruising Bot", desc: "An AI assistant that answers text-related questions for the MSL Cruise project, reducing time spent on manual consultation and improving response accuracy.", url: "https://msl-cruise-assistant.lovable.app/", emoji: "🚢" },
-            { id: "training-nairobi-6", name: "CruiseLabel Intelligence", desc: "An AI-powered performance tracking and coaching platform giving Cruise AV labellers, team leads, and supervisors real-time visibility into productivity metrics like SPL, accuracy, and active time.", url: "https://nexus-2-0.base44.app/", emoji: "📊" },
-            { id: "training-nairobi-7", name: "MySPL", desc: "A productivity calculator for Super Cruise annotation teams to compute SPL performance, understand key metrics, and plan targets.", url: "https://my-spl-pro.base44.app/", emoji: "🧮" },
-            { id: "training-nairobi-8", name: "AnnotaFlow", desc: "A full-stack data annotation platform enabling teams to create, review, and manage high-quality labeled datasets through structured workflows and role-based collaboration.", url: "https://manipulative-label-smart-flow.base44.app", emoji: "🏷️" },
-            { id: "training-nairobi-9", name: "NexusDesk", desc: "An IT service management platform that handles structured service delivery and issue tracking to streamline resolution of IT-related problems across the organization.", url: "https://ddd-itm-servicedesk-2026.base44.app", emoji: "🖥️" },
-            { id: "training-nairobi-10", name: "DDD Catalyst", desc: "A training and simulation platform that replaces static manuals with interactive, project-specific sandboxes mirroring real client workflows to fast-track proficiency in AI data annotation and content services.", url: "https://ddd-skill-sync.base44.app", emoji: "⚡" },
+            { id: "training-nairobi-1", name: "DDD Learning Hub", desc: "An online learning platform giving DDD staff access to structured courses on Machine Learning and Artificial Intelligence.", url: "https://ddd-learn-path.base44.app", emoji: "🤖", image: "images/ddd-learning.png" },
+            { id: "training-nairobi-2", name: "DDD RuleSync", desc: "A centralized platform that keeps data annotators and project teams aligned by consolidating project guidelines and instantly notifying users of rule changes.", url: "https://ddd-guideflow-37c98203.base44.app/", emoji: "🔔", image: "images/ddd-rulesync.png" },
+            { id: "training-nairobi-3", name: "Meet Insights.AI", desc: "An AI tool that transforms meeting notes and transcripts into clear summaries, actionable tasks, and quizzes to improve team understanding and productivity.", url: "https://meet-mind-ai-749e5430.base44.app", emoji: "🗒️", image: "" },
+            { id: "training-nairobi-4", name: "DDD New Joiner Onboarding Portal", desc: "A guided onboarding portal that walks new staff through key IT modules including email setup, browser usage, eTIMS invoicing, cybersecurity awareness, and common troubleshooting.", url: "https://ddd-onboard-buddy.lovable.app/", emoji: "🚀", image: "images/ddd-onboarding.png" },
+            { id: "training-nairobi-5", name: "Cruising Bot", desc: "An AI assistant that answers text-related questions for the MSL Cruise project, reducing time spent on manual consultation and improving response accuracy.", url: "https://msl-cruise-assistant.lovable.app/", emoji: "🚢", image: "images/msl-cruise.png" },
+            { id: "training-nairobi-6", name: "CruiseLabel Intelligence", desc: "An AI-powered performance tracking and coaching platform giving Cruise AV labellers, team leads, and supervisors real-time visibility into productivity metrics like SPL, accuracy, and active time.", url: "https://nexus-2-0.base44.app/", emoji: "📊", image: "images/cruise-label.png" },
+            { id: "training-nairobi-7", name: "MySPL", desc: "A productivity calculator for Super Cruise annotation teams to compute SPL performance, understand key metrics, and plan targets.", url: "https://my-spl-pro.base44.app/", emoji: "🧮", image: "images/myspl.png" },
+            { id: "training-nairobi-8", name: "AnnotaFlow", desc: "A full-stack data annotation platform enabling teams to create, review, and manage high-quality labeled datasets through structured workflows and role-based collaboration.", url: "https://manipulative-label-smart-flow.base44.app", emoji: "🏷️", image: "images/annota.png" },
+            { id: "training-nairobi-9", name: "NexusDesk", desc: "An IT service management platform that handles structured service delivery and issue tracking to streamline resolution of IT-related problems across the organization.", url: "https://ddd-itm-servicedesk-2026.base44.app", emoji: "🖥️", image: "images/nexus.png" },
+            { id: "training-nairobi-10", name: "DDD Catalyst", desc: "A training and simulation platform that replaces static manuals with interactive, project-specific sandboxes mirroring real client workflows to fast-track proficiency in AI data annotation and content services.", url: "https://ddd-skill-sync.base44.app", emoji: "⚡", image: "images/catalyst.png" },
           ]        
         },
         {
           id: "vientiane",
           name: "Vientiane",
           submissions: [
-            { id: "training-laos-1", name: "English Pro", desc: "A professional platform helping intermediate English learners break through plateaus with structured vocabulary, real-life dialogues, and interactive quizzes.", url: "https://statuesque-fluentify-master-path.base44.app", emoji: "🇬🇧" },
-            { id: "training-laos-2", name: "CompBuddy", desc: "An app that teaches computer basics to those who grew up without access to computers, helping bridge the digital knowledge gap.", url: "https://compbuddy.base44.app", emoji: "💻" },
-            { id: "training-laos-3", name: "VerbMaster", desc: "An interactive platform for Lao and ESL students to master past and past participle verb conjugations through games, progressive quizzes, and a self-correcting grammar checker.", url: "https://regular-irregular-verbs.lovable.app", emoji: "📝" },
-            { id: "training-laos-4", name: "Learn with Pick", desc: "A high-energy English learning app that makes mastering verbs and tenses fun through interactive games, Lao translations, and audio-visual tools.", url: "https://pick-tense-flow.base44.app", emoji: "🎮" },
-            { id: "training-laos-5", name: "VocapMaster", desc: "An app that helps English learners expand and strengthen their vocabulary.", url: "https://polar-lingo-bloom-learn.base44.app", emoji: "📖" },
-            { id: "training-laos-6", name: "DDD DocHub", desc: "An AI-powered document suite that simplifies complex document conversion and provides multilingual smart summaries to bridge language barriers in professional workflows.", url: "https://ddd-dochub.lovable.app", emoji: "📄" },
-            { id: "training-laos-7", name: "English Career Coach", desc: "An AI-powered app helping young professionals in Laos and Southeast Asia improve workplace English — from writing professional emails to performing well in job interviews.", url: "https://pro-speak-coach.base44.app", emoji: "👔" },
-            { id: "training-laos-8", name: "A-chieve", desc: "A career development app that generates personalized learning paths based on target roles and skill gaps, while helping DDD staff track student and associate performance.", url: "https://path-forge-go.base44.app", emoji: "🎯" },
-            { id: "training-laos-9", name: "HRConnect", desc: "A mobile-friendly HR app that lets employees submit leave requests and document requests from anywhere, reducing paper usage and administrative overhead.", url: "https://hrconnect-b96435f9.base44.app", emoji: "🏢" },
-            { id: "training-laos-10", name: "ຮຽນດີ", desc: "A student learning app focused on mathematics, offering short lessons, formulas, step-by-step solutions, and quizzes to address gaps in understanding and practice.", url: "https://hean-dee-go.base44.app", emoji: "🧮" },
+            { id: "training-laos-1", name: "English Pro", desc: "A professional platform helping intermediate English learners break through plateaus with structured vocabulary, real-life dialogues, and interactive quizzes.", url: "https://statuesque-fluentify-master-path.base44.app", emoji: "🇬🇧", image: "images/englishpro.png" },
+            { id: "training-laos-2", name: "CompBuddy", desc: "An app that teaches computer basics to those who grew up without access to computers, helping bridge the digital knowledge gap.", url: "https://compbuddy.base44.app", emoji: "💻", image: "images/compbuddy.png" },
+            { id: "training-laos-3", name: "VerbMaster", desc: "An interactive platform for Lao and ESL students to master past and past participle verb conjugations through games, progressive quizzes, and a self-correcting grammar checker.", url: "https://regular-irregular-verbs.lovable.app", emoji: "📝", image: "images/verbmaster.png" },
+            { id: "training-laos-4", name: "Learn with Pick", desc: "A high-energy English learning app that makes mastering verbs and tenses fun through interactive games, Lao translations, and audio-visual tools.", url: "https://pick-tense-flow.base44.app", emoji: "🎮", image: "images/pick.png" },
+            { id: "training-laos-5", name: "VocapMaster", desc: "An app that helps English learners expand and strengthen their vocabulary.", url: "https://polar-lingo-bloom-learn.base44.app", emoji: "📖", image: "images/vocab.png" },
+            { id: "training-laos-6", name: "DDD DocHub", desc: "An AI-powered document suite that simplifies complex document conversion and provides multilingual smart summaries to bridge language barriers in professional workflows.", url: "https://ddd-dochub.lovable.app", emoji: "📄", image: "images/dochub.png" },
+            { id: "training-laos-7", name: "English Career Coach", desc: "An AI-powered app helping young professionals in Laos and Southeast Asia improve workplace English — from writing professional emails to performing well in job interviews.", url: "https://pro-speak-coach.base44.app", emoji: "👔", image: "images/career.png" },
+            { id: "training-laos-8", name: "A-chieve", desc: "A career development app that generates personalized learning paths based on target roles and skill gaps, while helping DDD staff track student and associate performance.", url: "https://path-forge-go.base44.app", emoji: "🎯", image: "images/achieve.png" },
+            { id: "training-laos-9", name: "HRConnect", desc: "A mobile-friendly HR app that lets employees submit leave requests and document requests from anywhere, reducing paper usage and administrative overhead.", url: "https://hrconnect-b96435f9.base44.app", emoji: "🏢", image: "images/hr.png" },
+            { id: "training-laos-10", name: "ຮຽນດີ", desc: "A student learning app focused on mathematics, offering short lessons, formulas, step-by-step solutions, and quizzes to address gaps in understanding and practice.", url: "https://hean-dee-go.base44.app", emoji: "🧮", image: "images/lao.png" },
           ]        
         },
         {
           id: "phnom-penh",
           name: "Phnom Penh",
           submissions: [
-            { id: "training-cambodia-1", name: "DDD Smart Learning Hub", desc: "An AI-powered learning management system that helps DDD interns learn faster through structured lessons, quizzes, progress tracking, and AI-guided feedback.", url: "https://ddd-smart-learn.base44.app/", emoji: "🎓" },
-            { id: "training-cambodia-2", name: "DDD Smart Learn", desc: "An app that helps DDD employees and trainees understand training materials by turning complex information into simple explanations, quizzes, and interactive learning tools.", url: "https://kind-ddd-smart-learn.base44.app", emoji: "📚" },
-            { id: "training-cambodia-3", name: "Job Plus", desc: "A job matching app that helps people and university students find jobs that fit their skills and interests.", url: "https://curvy-elevate-career-path.base44.app", emoji: "💼" },
-            { id: "training-cambodia-4", name: "SnapStudy", desc: "An AI study app for DDD learners that converts uploaded PDFs or pasted notes into flashcards, quizzes, and audio documents, with instant feedback and progress tracking across practical topics like Excel, English, and digital literacy.", url: "https://dramatic-snap-study-smart.base44.app", emoji: "📸" },
-            { id: "training-cambodia-5", name: "LeavePulse", desc: "A leave management app that helps organizations track leave types and generate daily, weekly, and monthly reports — with automatic notifications to supervisors and requesters.", url: "https://curious-leave-pulse-flow.base44.app", emoji: "🗓️" },
-            { id: "training-cambodia-6", name: "WordVista", desc: "A vocabulary learning app that provides word meanings, pronunciations, and images to help users better understand and remember new words.", url: "https://word-vista-flow.base44.app/", emoji: "📖" },
-            { id: "training-cambodia-7", name: "DDD Fluency Partner", desc: "A professional English communication coach app designed for DDD staff in Cambodia and Laos to strengthen workplace English skills used in their daily work environment.", url: "https://speak-ddd-pro.base44.app", emoji: "🗣️" },
-            { id: "training-cambodia-8", name: "LuxeShop", desc: "An e-commerce platform where users can browse and purchase a wide range of products.", url: "https://luxseshop.base44.app", emoji: "🛍️" },
-            { id: "training-cambodia-9", name: "My Learning", desc: "A modern learning management dashboard that helps users track progress, explore courses, and earn certifications through a clean and user-friendly interface.", url: "https://lurking-lumina-learn-hub.base44.app", emoji: "🏅" },
-            { id: "training-cambodia-10", name: "PayrollPro", desc: "A payroll management app that automates employee record keeping, attendance tracking, salary calculations, and payslip generation to reduce manual HR work and minimize errors.", url: "https://friendly-pay-flow-hq.base44.app/", emoji: "💰" },
+            { id: "training-cambodia-1", name: "DDD Smart Learning Hub", desc: "An AI-powered learning management system that helps DDD interns learn faster through structured lessons, quizzes, progress tracking, and AI-guided feedback.", url: "https://ddd-smart-learn.base44.app/", emoji: "🎓", image: "images/smarthub.png" },
+            { id: "training-cambodia-2", name: "DDD Smart Learn", desc: "An app that helps DDD employees and trainees understand training materials by turning complex information into simple explanations, quizzes, and interactive learning tools.", url: "https://kind-ddd-smart-learn.base44.app", emoji: "📚", image: "images/smartlearn.png" },
+            { id: "training-cambodia-3", name: "Job Plus", desc: "A job matching app that helps people and university students find jobs that fit their skills and interests.", url: "https://curvy-elevate-career-path.base44.app", emoji: "💼", image: "images/job.png" },
+            { id: "training-cambodia-4", name: "SnapStudy", desc: "An AI study app for DDD learners that converts uploaded PDFs or pasted notes into flashcards, quizzes, and audio documents, with instant feedback and progress tracking across practical topics like Excel, English, and digital literacy.", url: "https://dramatic-snap-study-smart.base44.app", emoji: "📸", image: "images/study.png" },
+            { id: "training-cambodia-5", name: "LeavePulse", desc: "A leave management app that helps organizations track leave types and generate daily, weekly, and monthly reports — with automatic notifications to supervisors and requesters.", url: "https://curious-leave-pulse-flow.base44.app", emoji: "🗓️", image: "images/leave.png" },
+            { id: "training-cambodia-6", name: "WordVista", desc: "A vocabulary learning app that provides word meanings, pronunciations, and images to help users better understand and remember new words.", url: "https://word-vista-flow.base44.app/", emoji: "📖", image: "images/wordvisa.png" },
+            { id: "training-cambodia-7", name: "DDD Fluency Partner", desc: "A professional English communication coach app designed for DDD staff in Cambodia and Laos to strengthen workplace English skills used in their daily work environment.", url: "https://speak-ddd-pro.base44.app", emoji: "🗣️", image: "images/fluency.png" },
+            { id: "training-cambodia-8", name: "LuxeShop", desc: "An e-commerce platform where users can browse and purchase a wide range of products.", url: "https://luxseshop.base44.app", emoji: "🛍️", image: "images/luxeshop.png" },
+            { id: "training-cambodia-9", name: "My Learning", desc: "A modern learning management dashboard that helps users track progress, explore courses, and earn certifications through a clean and user-friendly interface.", url: "https://lurking-lumina-learn-hub.base44.app", emoji: "🏅", image: "images/mylearning.png" },
+            { id: "training-cambodia-10", name: "PayrollPro", desc: "A payroll management app that automates employee record keeping, attendance tracking, salary calculations, and payslip generation to reduce manual HR work and minimize errors.", url: "https://friendly-pay-flow-hq.base44.app/", emoji: "💰", image: "images/payrollpro.png" },
           ]        
         }
       ]
@@ -1053,6 +1065,18 @@
      In the APPS array near the top of the <script> block, replace
      each "App Name N", description, URL, and emoji with your real
      submission details.
+
+     TO ADD SCREENSHOTS / THUMBNAILS
+     Each submission has an image: "" field. Fill it in with:
+       a. A relative path if you store images alongside index.html:
+              image: "images/my-app.png"
+          Then create an "images/" folder in your repo and upload
+          your screenshots there (any web-friendly format works:
+          .png, .jpg, .webp).
+       b. An absolute URL if your image is hosted elsewhere:
+              image: "https://example.com/screenshot.png"
+     Leave image: "" blank to show the auto-generated coloured
+     placeholder with the app's initials.
 
   2. SET UP YOUR GOOGLE FORMS
      a. Go to forms.google.com → create three forms: one for Nairobi, one for Vientiane, and one for Phnom Penh.
